@@ -1,0 +1,6 @@
+fname = input("ФИО: ")
+mas = fname.split()
+inic = ''.join([a[0].upper() for a in mas])
+cl = ' '.join(fname.split())
+print(f"Инициалы: {inic}.")
+print(f"Длина (символов): {len(cl)}")
