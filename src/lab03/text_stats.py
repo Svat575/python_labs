@@ -10,3 +10,7 @@ freqs = count_freq(tokens)
 top_5 = top_n(freqs, 5)
 
 print(f"Всего слов: {len(tokens)}\nУникальных слов: {len(freqs.keys())}\nТоп-5:")
+
+for item in top_5:
+    k, v = item
+    print(f"{k}:{v}")
