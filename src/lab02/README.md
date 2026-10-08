@@ -267,22 +267,30 @@ def format_record(rec: tuple[str, str, float]) -> str:
         Type: str.
 
     Raises:
-        ValueError: If fio contains fewer than 2 parts.
-        TypeError: If rec is not a tuple of three elements.
+        ValueError: fio is empty.
+        ValueError: groups is empty.
+        TypeError: GPA isnt float.
     """
     fio, group, gpa = rec
-    fio_parts = fio.strip().split()
 
-    if len(fio_parts) < 2:
-        raise ValueError("FIO must contain at least surname and name.")
+    fio = " ".join(fio.split())
 
-    surname = fio_parts[0].capitalize()
+    if not fio:
+        raise ValueError("Incorrect fio.")
+    if not group:
+        raise ValueError("Incorrect group.")
+    if not isinstance(gpa, float):
+        raise TypeError("Incorrect type for GPA.")
 
-    initials = "".join(part[0].upper() + "." for part in fio_parts[1:])
+    name_parts = fio.split()
+    surname = name_parts[0].capitalize()
 
-    group_clean = " ".join(group.strip().split())
+    if len(name_parts) == 3:
+        initials = f"{name_parts[1][0].upper()}. {name_parts[2][0].upper()}."
+    else:
+        initials = f"{name_parts[1][0].upper()}."
 
-    return f"{surname} {initials}, гр. {group_clean}, GPA {gpa:.2f}"
+    return f"{surname} {initials}, гр. {group}, GPA {gpa:.2f}"
 
 
 print(format_record( ("Иванов Иван Иванович", "BIVT-25", 4.6) ))
