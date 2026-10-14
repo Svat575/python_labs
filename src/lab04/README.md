@@ -79,6 +79,7 @@ def ensure_parent_dir(path: str | Path) -> None:
 ```
 ### тест кейсы
 ![](../../images/lab04/ex011.png)
+
 ![](../../images/lab04/ex012.png)
 
 ## Задание B
@@ -155,11 +156,16 @@ if __name__ == "__main__":
 
 ### тест кейсы
 не пустой файл
+
 ![](../../images/lab04/ex013.png)
 ![](../../images/lab04/ex014.png)
+
 пустой файл
+
 ![](../../images/lab04/ex021.png)
 ![](../../images/lab04/ex022.png)
+
 не стандратная кодировка
+
 ![](../../images/lab04/ex031.png)
 ![](../../images/lab04/ex032.png)
