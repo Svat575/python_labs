@@ -69,6 +69,7 @@ def count_freq(tokens: list[str]) -> dict [str, int]:
         sl.update({i: cl})
     return sl
 
+
 def top_n(freq: dict[str, int], n: int = 5) -> list [ tuple [str, int] ]:
     """
     It returns TOP-n of tokens by frequencies.
@@ -93,4 +94,3 @@ def top_n(freq: dict[str, int], n: int = 5) -> list [ tuple [str, int] ]:
     items = [i for i in freq.items()]
     items.sort(key=lambda x: x[1], reverse=True)
     return items[:n]
-
