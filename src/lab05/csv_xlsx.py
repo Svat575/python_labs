@@ -3,7 +3,7 @@ from openpyxl import Workbook
 import csv
 
 
-def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None: # Переводит csv в xlsx 
+def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None: 
     file = Path(csv_path)
 
     if not file.exists():

@@ -9,3 +9,4 @@
 ## [лабороторная 4](src/lab04/README.md)
 ## [лабороторная 5](src/lab05/README.md)
 ## [лабороторная 6](src/lab06/README.md)
+## [лабороторная 7](src/lab07/README.md)

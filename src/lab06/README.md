@@ -171,7 +171,7 @@ if __name__ == "__main__":
 #### people.csv -> people.xlsx
 ![](../../images/lab06/ex17.png)
 ---
-![alt text](../../images/lab06/ex18.png)
+![](../../images/lab06/ex18.png)
 ---
-![alt text](../../images/lab06/ex19.png)
+![](../../images/lab06/ex19.png)
 
