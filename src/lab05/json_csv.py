@@ -3,106 +3,59 @@ import json
 from pathlib import Path
 
 
-def _check_suffix(path: Path, expected: str) -> None:
-    """Проверяет расширение файла (регистронезависимо)."""
-    if path.suffix.lower() != expected:
-        raise ValueError(
-            f"Неверный тип файла: {path.name}. Ожидалось расширение {expected}"
-        )
+def json_to_csv(json_path: str, csv_path: str) -> None: # Переводит json в csv
+    file = Path(json_path)
+
+    if not file.exists():
+        raise FileNotFoundError('Файл не существует')
+    if file.suffix != '.json':
+        raise ValueError('Файл должен быть .json')
+
+    with open(file, encoding='utf-8') as f:
+        data = json.load(f)
+
+    if not data or type(data) is not list or not all(type(item) is dict for item in data):
+        raise ValueError("Пустой или неверный JSON")
+
+    colums = []
+    for item in data:
+        for key in item:
+            if key not in colums:
+                colums.append(key)
+
+    with open(csv_path, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerow(colums)
+        for item in data:
+            values = []
+            for i in colums:
+                values.append(item.get(i, ''))
+            writer.writerow(values)
 
 
-def json_to_csv(json_path: str, csv_path: str) -> None:
-    """
-    Преобразует JSON-файл в CSV.
+def csv_to_json(csv_path: str, json_path: str) -> None: # Переводит csv в json
+    file = Path(csv_path)
 
-    Args:
-        json_path: str путь
-        csv_path:  str путь
+    if not file.exists():
+        raise FileNotFoundError('Файл не существует')
+    if file.suffix != '.csv':
+         raise ValueError('Файл должен быть .csv')
 
-    Returns:
-        None
-
-    Exceptions:
-        FileNotFoundError: если входной файл отсутствует
-        ValueError: пустой JSON, неверная структура, неверное расширение
-    """
-    jp = Path(json_path)
-    cp = Path(csv_path)
-
-    _check_suffix(jp, ".json")
-    _check_suffix(cp, ".csv")
-
-    if not jp.exists():
-        raise FileNotFoundError(f"Файл не найден: {jp}")
-
-    with jp.open(encoding="utf-8") as f:
-        try:
-            data = json.load(f)
-        except json.JSONDecodeError as e:
-            raise ValueError(f"Некорректный JSON: {e}") from e
+    with open(file, encoding='utf-8') as f:
+        i = csv.DictReader(f)
+        data = list(i)
+        if not i.fieldnames:
+                raise ValueError('Пустой CSV или нет заголовка')
 
     if not data:
-        raise ValueError("Пустой JSON или неподдерживаемая структура")
+        raise ValueError('В CSV нет данных')
 
-    if not isinstance(data, list):
-        raise ValueError("Пустой JSON или неподдерживаемая структура")
-
-    for item in data:
-        if not isinstance(item, dict):
-            raise ValueError("JSON должен быть списком словарей")
-
-    fieldnames: list[str] = []
-    seen: set[str] = set()
-    for obj in data:
-        for key in obj.keys():
-            if key not in seen:
-                seen.add(key)
-                fieldnames.append(key)
-
-    cp.parent.mkdir(parents=True, exist_ok=True)
-
-    with cp.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames, restval="")
-        writer.writeheader()
-        for obj in data:
-            writer.writerow({k: obj.get(k, "") for k in fieldnames})
+    with open(json_path, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
 
-def csv_to_json(csv_path: str, json_path: str) -> None:
-    """
-    Преобразует CSV в JSON (список словарей).
-
-    Args:
-        csv_path:  str путь
-        json_path: str путь
-
-    Returns:
-        None
-
-    Exceptions:
-        FileNotFoundError: если входной файл отсутствует
-        ValueError: пустой CSV, отсутствует заголовок, неверное расширение
-    """
-    cp = Path(csv_path)
-    jp = Path(json_path)
-
-    _check_suffix(cp, ".csv")
-    _check_suffix(jp, ".json")
-
-    if not cp.exists():
-        raise FileNotFoundError(f"Файл не найден: {cp}")
-
-    with cp.open(encoding="utf-8", newline="") as f:
-        reader = csv.DictReader(f)
-        if reader.fieldnames is None:
-            raise ValueError("CSV без заголовка")
-        fieldnames = reader.fieldnames
-        rows = [dict(row) for row in reader]
-
-    if not rows:
-        raise ValueError("Пустой CSV")
-
-    jp.parent.mkdir(parents=True, exist_ok=True)
-
-    with jp.open("w", encoding="utf-8") as f:
-        json.dump(rows, f, ensure_ascii=False, indent=2)
+if __name__ == '__main__':
+    json_to_csv('data/lab05/samples/people.json', 'data/lab05/out/people_from_json.csv')
+    csv_to_json('data/lab05/samples/people.csv', 'data/lab05/out/people_from_csv.json')
+    json_to_csv('data/lab05/samples/products.json', 'data/lab05/out/products_from_json.csv')
+    csv_to_json('data/lab05/samples/students.csv', 'data/lab05/out/students_from_csv.json')

@@ -8,3 +8,4 @@
 ## [лабороторная 3](src/lab03/README.md)
 ## [лабороторная 4](src/lab04/README.md)
 ## [лабороторная 5](src/lab05/README.md)
+## [лабороторная 6](src/lab06/README.md)
