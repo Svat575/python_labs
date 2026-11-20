@@ -24,7 +24,6 @@ def bubble_sort(nums):
                 arr[j], arr[j+1] = arr[j+1], arr[j]
                 change = True
         if not change:
-            # Exit early if array is already sorted
             break
     return arr
 
